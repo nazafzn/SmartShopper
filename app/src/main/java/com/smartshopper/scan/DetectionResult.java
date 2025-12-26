@@ -1,4 +1,4 @@
-package com.example.smartshopper.scan;
+package com.smartshopper.scan;
 
 import android.graphics.RectF;
 

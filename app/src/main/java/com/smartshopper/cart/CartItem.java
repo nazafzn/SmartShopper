@@ -1,4 +1,4 @@
-package com.example.smartshopper.cart;
+package com.smartshopper.cart;
 
 public class CartItem {
     private String productId;

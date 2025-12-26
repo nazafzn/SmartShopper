@@ -1,4 +1,4 @@
-package com.example.smartshopper.home;
+package com.smartshopper.home;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,11 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import com.example.smartshopper.R;
-import com.example.smartshopper.cart.CartActivity;
-import com.example.smartshopper.cart.CartManager;
-import com.example.smartshopper.scan.ScanActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.smartshopper.R;
+import com.smartshopper.cart.CartActivity;
+import com.smartshopper.cart.CartManager;
+import com.smartshopper.scan.ScanActivity;
 
 import java.util.Locale;
 

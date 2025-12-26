@@ -1,4 +1,4 @@
-package com.example.smartshopper.scan;
+package com.smartshopper.scan;
 
 import java.util.List;
 

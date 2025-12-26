@@ -1,4 +1,4 @@
-package com.example.smartshopper.cart;
+package com.smartshopper.cart;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.smartshopper.R;
+import com.smartshopper.R;
 
 import java.util.List;
 import java.util.Locale;

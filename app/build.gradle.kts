@@ -2,16 +2,17 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt")
 }
 
 android {
-    namespace = "com.example.smartshopper"
+    namespace = "com.smartshopper"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.example.smartshopper"
+        applicationId = "com.smartshopper"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -42,6 +43,8 @@ android {
 }
 
 dependencies {
+    implementation("androidx.room:room-runtime:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

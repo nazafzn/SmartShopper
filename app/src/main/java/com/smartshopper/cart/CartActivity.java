@@ -1,4 +1,4 @@
-package com.example.smartshopper.cart;
+package com.smartshopper.cart;
 
 import android.os.Bundle;
 import android.view.View;
@@ -12,9 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.smartshopper.R;
+import com.smartshopper.R;
 
-import java.util.List;
 import java.util.Locale;
 
 public class CartActivity extends AppCompatActivity implements OnCartUpdateListener {

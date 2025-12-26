@@ -1,4 +1,4 @@
-package com.example.smartshopper.cart;
+package com.smartshopper.cart;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +31,12 @@ public class CartManager {
 
     public List<CartItem> getCartItems() {
         return cartItems;
+    }
+
+    public void addItem(String name, double price) {
+        // For simplicity, we'll give each new item a unique ID based on the current time
+        String id = String.valueOf(System.currentTimeMillis());
+        cartItems.add(new CartItem(id, name, price, 1, ""));
     }
 
     public double getTotalPrice() {

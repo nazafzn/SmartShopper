@@ -1,4 +1,4 @@
-package com.example.smartshopper.scan;
+package com.smartshopper.scan;
 
 import android.Manifest;
 import android.content.Intent;
@@ -14,9 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.smartshopper.R;
-import com.example.smartshopper.cart.CartActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.smartshopper.R;
+import com.smartshopper.cart.CartActivity;
 
 import java.util.List;
 
