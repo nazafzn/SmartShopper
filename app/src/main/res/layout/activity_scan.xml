@@ -67,13 +67,11 @@
             app:layout_constraintTop_toBottomOf="@id/top_bar"
             app:layout_constraintBottom_toTopOf="@id/detection_result_container">
 
-            <ImageView
-                android:id="@+id/viewfinder_overlay"
-                android:layout_width="280dp"
-                android:layout_height="280dp"
-                android:layout_gravity="center"
-                android:src="@drawable/viewfinder_frame"
-                android:contentDescription="Camera viewfinder frame" />
+            <!-- Overlay for bounding boxes -->
+            <com.smartshopper.scan.OverlayView
+                android:id="@+id/overlayView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </FrameLayout>
 
         <!-- Detection Result Card -->
@@ -81,64 +79,74 @@
             android:id="@+id/detection_result_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="24dp"
+            android:layout_margin="16dp"
             android:visibility="gone"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="16dp"
-            app:layout_constraintBottom_toTopOf="@id/bottom_actions">
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
+            app:layout_constraintBottom_toTopOf="@id/bottom_actions"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android.orientation="horizontal"
-                android:padding="24dp"
+                android:padding="20dp"
+                android:orientation="horizontal"
                 android:gravity="center_vertical">
 
-                <ImageView
-                    android:id="@+id/iv_product_icon"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:src="@drawable/ic_product_placeholder"
-                    android:contentDescription="Product icon" />
-
+                <!-- Text Container -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginStart="16dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tv_product_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Product Name"
-                        android:textColor="@color/gray_800"
-                        android:textSize="22sp"
+                        android:textColor="@color/white_80"
+                        android:textSize="18sp"
                         android:textStyle="bold"
                         android:maxLines="2"
                         android:ellipsize="end" />
 
                     <TextView
+                        android:id="@+id/tv_product_brand"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Product Brand"
+                        android:textColor="@color/gray_100"
+                        android:textSize="14sp"
+                        android:layout_marginTop="2dp"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
+
+                    <TextView
                         android:id="@+id/tv_product_price"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="RM0.00"
                         android:textColor="@color/green_600"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:layout_marginTop="4dp" />
+                        android:layout_marginTop="8dp" />
                 </LinearLayout>
 
+                <!-- Action Button -->
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/btn_add_to_cart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
                     android:src="@drawable/ic_add"
                     android:contentDescription="Add product to cart"
                     app:tint="@color/white"
                     app:backgroundTint="@color/green_600"
-                    app:fabSize="normal" />
+                    app:fabSize="normal"
+                    app:elevation="0dp" />
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

@@ -23,7 +23,7 @@ public class ProductRepository {
     }
 
     public void insertAllProducts() {
-        List<ProductEntity> products = Arrays.asList(
+        List<ProductEntity> products = Arrays.asList( // TODO put accurate prices later
                 new ProductEntity("instant_noodles_maggi_kari", "Instant Noodles", 5.0, "Maggi", "Quick and tasty Maggi curry noodles."),
                 new ProductEntity("biscuits_quaker", "Biscuits", 4.0, "Quaker", "Crispy Quaker biscuits, perfect with tea."),
                 new ProductEntity("olive_oil_naturel", "Olive Oil", 20.0, "Naturel", "Pure Naturel olive oil for cooking and salads."),
@@ -31,7 +31,8 @@ public class ProductRepository {
                 new ProductEntity("Biscuit Chips More", "Biscuits", 15.0, "Chips More", "Chips More biscuits, a chocolate treat."),
                 new ProductEntity("Biscuit Munchy's", "Biscuits", 10.0, "Munchy's", "Munchy's biscuits, light and tasty."),
                 new ProductEntity("Bread Sunshine", "Bread", 5.0, "Sunshine", "Soft Sunshine bread, great for sandwiches."),
-                new ProductEntity("Instant Noodles Chef", "Instant Noodles", 6.0, "Chef", "Chef brand instant noodles, quick meal.")
+                new ProductEntity("Instant Noodles Chef", "Instant Noodles", 6.0, "Chef", "Chef brand instant noodles, quick meal."),
+                new ProductEntity("Shampoo Sunsilk", "Shampoo Sunsilk Clean & Fresh", 10.0, "Sunsilk", "Sunsilk shampoo for hair care.")
                 // Add remaining 8 products here; didn't add because not sure
         );
 
@@ -42,7 +43,10 @@ public class ProductRepository {
         return productDao.getProductByLabel(label);
     }
 
-    public List<ProductEntity> getAllProducts() {
-        return productDao.getAllProducts();
+    public List<ProductEntity> getAllProducts() {return productDao.getAllProducts();}
+
+
+    public void clearDatabase() {
+        new Thread(() -> productDao.clearDatabase()).start();
     }
 }

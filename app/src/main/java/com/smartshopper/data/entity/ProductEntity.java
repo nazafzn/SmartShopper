@@ -35,4 +35,5 @@ public class ProductEntity {
     public void setBrand(String brand) { this.brand = brand; }
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+    public String toString() {return String.format("%s, %s, RM%.2f, %s, %s", label, name, price, brand, description);}
 }
