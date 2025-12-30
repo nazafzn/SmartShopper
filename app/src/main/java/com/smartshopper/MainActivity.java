@@ -9,6 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.smartshopper.data.repository.ProductRepository;
 import com.smartshopper.home.HomeActivity;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int SPLASH_DELAY = 1000; // 1 seconds
@@ -19,9 +22,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ProductRepository repository = new ProductRepository(this);
-        // Clear old data first, then insert fresh data
-        repository.clearDatabase(); // Deletes all items
-        repository.insertAllProducts(); // Re-inserts your 16 products
+
+//        repository.clearDatabase();
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            if (repository.getProductCount() == 0) {
+                repository.insertAllProducts();
+            }
+        });
+
 
 
         new Handler().postDelayed(() -> {

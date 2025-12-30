@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,7 +44,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     class CartViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView ivProductIcon;
         private TextView tvProductName;
         private TextView tvProductPrice;
         private TextView tvQuantity;
@@ -53,10 +51,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         private ImageButton btnDecreaseQuantity;
         private ImageButton btnIncreaseQuantity;
         private ImageButton btnDeleteItem;
+        private View cartItemContainer;
+
 
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
-            ivProductIcon = itemView.findViewById(R.id.iv_cart_product_icon);
             tvProductName = itemView.findViewById(R.id.tv_cart_product_name);
             tvProductPrice = itemView.findViewById(R.id.tv_cart_product_price);
             tvQuantity = itemView.findViewById(R.id.tv_quantity);
@@ -64,11 +63,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             btnDecreaseQuantity = itemView.findViewById(R.id.btn_decrease_quantity);
             btnIncreaseQuantity = itemView.findViewById(R.id.btn_increase_quantity);
             btnDeleteItem = itemView.findViewById(R.id.btn_delete_item);
+            cartItemContainer = itemView.findViewById(R.id.cart_item_container);
         }
 
         public void bind(CartItem cartItem) {
-            // TODO: Load image with a library like Glide or Picasso
-            // ivProductIcon.setImageURI(cartItem.getImageUrl());
 
             tvProductName.setText(cartItem.getName());
             tvProductPrice.setText(String.format(Locale.getDefault(), "RM%.2f each", cartItem.getPrice()));
@@ -96,6 +94,43 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 notifyItemRemoved(getAdapterPosition());
                 onCartUpdateListener.onCartUpdated();
             });
+
+            cartItemContainer.setOnClickListener(v -> {
+                onCartUpdateListener.onSpeakItemInCart(String.format(
+                        "%d, %s, total price: %s",
+                        cartItem.getQuantity(),
+                        cartItem.getName(),
+                        speakProductPrice(cartItem.getPrice() * cartItem.getQuantity())
+                ));
+            });
+        }
+
+        private String speakProductPrice(double price) {
+            // Split the price into whole numbers and decimals
+            int ringgit = (int) price;
+            int cents = (int) Math.round((price - ringgit) * 100);
+
+            StringBuilder priceString = new StringBuilder();
+
+            // Handle Ringgit part
+            if (ringgit > 0) {
+                priceString.append(ringgit).append(" Ringgit");
+            }
+
+            // Handle Cents part
+            if (cents > 0) {
+                if (ringgit > 0) {
+                    priceString.append(" and ");
+                }
+                priceString.append(cents).append(" cents");
+            }
+
+            // Handle cases where price might be 0.00
+            if (ringgit == 0 && cents == 0) {
+                return "Zero Ringgit";
+            }
+
+            return priceString.toString();
         }
 
         private void updateSubtotal(CartItem cartItem) {

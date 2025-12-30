@@ -45,6 +45,9 @@ public class ProductRepository {
 
     public List<ProductEntity> getAllProducts() {return productDao.getAllProducts();}
 
+    public int getProductCount() {
+        return productDao.getProductCount();
+    }
 
     public void clearDatabase() {
         new Thread(() -> productDao.clearDatabase()).start();

@@ -58,7 +58,7 @@
         android:clipToPadding="false"
         android:padding="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@id/checkout_container"
+        app:layout_constraintBottom_toTopOf="@id/total_cart_container"
         app:layout_constraintTop_toBottomOf="@+id/header_cart" />
 
     <!-- Empty Cart State -->
@@ -70,7 +70,7 @@
         android:orientation="vertical"
         android:padding="32dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/checkout_container"
+        app:layout_constraintBottom_toTopOf="@id/total_cart_container"
         app:layout_constraintTop_toBottomOf="@+id/header_cart">
 
         <ImageView
@@ -106,7 +106,7 @@
 
     <!-- Checkout Container -->
     <androidx.cardview.widget.CardView
-        android:id="@+id/checkout_container"
+        android:id="@+id/total_cart_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="0dp"
@@ -135,7 +135,9 @@
                     android:text="Total"
                     android:textColor="@color/gray_800"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginTop="3dp"/>
 
                 <TextView
                     android:id="@+id/tv_total_price"
@@ -145,19 +147,20 @@
                     android:text="RM0.00"
                     android:textColor="@color/blue_600"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginTop="3dp"/>
+
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_checkout"
+
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:background="@drawable/gradient_green_button"
-                android:contentDescription="Proceed to Checkout button"
-                android:text="Proceed to Checkout"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content"
+                android:contentDescription="voice out text"
+                android:text="Tap any card to voice out."
+                android:textAlignment="center"/>
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

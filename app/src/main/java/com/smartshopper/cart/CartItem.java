@@ -5,14 +5,12 @@ public class CartItem {
     private String name;
     private double price;
     private int quantity;
-    private String imageUrl;
 
-    public CartItem(String productId, String name, double price, int quantity, String imageUrl) {
+    public CartItem(String productId, String name, double price, int quantity) {
         this.productId = productId;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
-        this.imageUrl = imageUrl;
     }
 
     public String getProductId() {
@@ -35,7 +33,4 @@ public class CartItem {
         this.quantity = quantity;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
 }

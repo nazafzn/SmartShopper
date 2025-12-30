@@ -27,6 +27,7 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.smartshopper.R;
 import com.smartshopper.cart.CartActivity;
+import com.smartshopper.cart.CartManager;
 import com.smartshopper.data.entity.ProductEntity;
 import com.smartshopper.data.repository.ProductRepository;
 import com.smartshopper.ml.ProductDetector;
@@ -56,6 +57,7 @@ public class ScanActivity extends AppCompatActivity {
     private boolean isProcessing = false;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private ProductRepository productRepository;
+    private ProductEntity scannedProduct;
 
     // Text-to-Speech
     private TextToSpeech textToSpeech;
@@ -64,6 +66,9 @@ public class ScanActivity extends AppCompatActivity {
     private long lastSpeechTime = 0;
     private static final long TTS_COOLDOWN_MS = 5000; // avoid overlapping audio
     private static final long CARD_TIMEOUT_MS = 3000; // make the card stay longer after detection (5secs)
+
+    // cart manager
+    private CartManager cartManager;
 
 
     @Override
@@ -84,14 +89,17 @@ public class ScanActivity extends AppCompatActivity {
 
         // Find buttons
         ImageButton btnBack = findViewById(R.id.btn_back);
-        ImageButton btnTtsToggle = findViewById(R.id.btn_tts_toggle_scan);
+        ImageButton btnTtsToggle = findViewById(R.id.btn_tts_toggle_scan);  // todo add voice
         FloatingActionButton btnAddToCart = findViewById(R.id.btn_add_to_cart);
         Button btnViewCart = findViewById(R.id.btn_view_cart_from_scan);
 
         // Set click listeners
         btnBack.setOnClickListener(v -> finish());
         btnTtsToggle.setOnClickListener(v -> Toast.makeText(ScanActivity.this, "tts button clicked", Toast.LENGTH_SHORT).show());
-        btnAddToCart.setOnClickListener(v -> Toast.makeText(ScanActivity.this, "Product added to cart", Toast.LENGTH_SHORT).show());
+        btnAddToCart.setOnClickListener(v -> {
+            CartManager.getInstance().addItem(scannedProduct.getName(), scannedProduct.getPrice());
+            Toast.makeText(ScanActivity.this, "Product added to cart", Toast.LENGTH_SHORT).show();
+        });
         btnViewCart.setOnClickListener(v -> startActivity(new Intent(ScanActivity.this, CartActivity.class)));
 
         // Initialize TFLite model
@@ -148,7 +156,7 @@ public class ScanActivity extends AppCompatActivity {
     private final Runnable detectionRunnable = new Runnable() {
         @Override
         public void run() {
-            // Only process if we aren't already busy with a previous frame
+            // Only process if not busy with a previous frame
             if (textureView.isAvailable() && !isProcessing) {
                 isProcessing = true;
 
@@ -159,8 +167,6 @@ public class ScanActivity extends AppCompatActivity {
                 if (bitmap != null) {
                     // Run detection on a background thread to keep UI smooth
                     new Thread(() -> {
-                        // This assumes your ProductDetector has a 'detect' method
-                        // and it calls onDetections() when finished
                         productDetector.detect(bitmap,results -> {
                             Log.d(TAG, "Detection results: " + results);
                             runOnUiThread(() -> processDetectionResults(results));
@@ -208,13 +214,16 @@ public class ScanActivity extends AppCompatActivity {
         // Query the database in a background thread (Room doesn't allow main-thread queries)
         new Thread(() -> {
             ProductEntity product = productRepository.getProductByLabel(label);
+            // debugging
             Log.d(TAG, label);
 
-
             if (product != null) {
+                this.scannedProduct = product;
+
                 // Return to UI thread to show the data
                 runOnUiThread(() -> {
                     detection_result_container.setVisibility(View.VISIBLE);
+                    btn_add_to_cart.setVisibility(View.VISIBLE);
                     tv_product_name.setText(product.getName());
                     tv_product_brand.setText(product.getBrand());
                     tv_product_price.setText(String.format(Locale.US, "RM%.2f", product.getPrice()));
@@ -226,6 +235,7 @@ public class ScanActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     // product is not in DB
                     detection_result_container.setVisibility(View.VISIBLE);
+                    btn_add_to_cart.setVisibility(View.GONE);
                     tv_product_name.setText(label);
                     tv_product_price.setText("Product information not available");
 
@@ -279,6 +289,7 @@ public class ScanActivity extends AppCompatActivity {
             lastSpokenProduct = product;
             lastSpeechTime = currentTime;
 
+            //debugging
             Log.d(TAG, "Speaking: " + product);
         }
     }
