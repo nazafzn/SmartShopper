@@ -16,8 +16,8 @@ import java.util.Locale;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
 
-    private List<CartItem> cartItems;
-    private OnCartUpdateListener onCartUpdateListener;
+    private final List<CartItem> cartItems;
+    private final OnCartUpdateListener onCartUpdateListener;
 
     public CartAdapter(List<CartItem> cartItems, OnCartUpdateListener onCartUpdateListener) {
         this.cartItems = cartItems;
@@ -44,14 +44,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     class CartViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvProductName;
-        private TextView tvProductPrice;
-        private TextView tvQuantity;
-        private TextView tvSubtotal;
-        private ImageButton btnDecreaseQuantity;
-        private ImageButton btnIncreaseQuantity;
-        private ImageButton btnDeleteItem;
-        private View cartItemContainer;
+        private final TextView tvProductName;
+        private final TextView tvProductPrice;
+        private final TextView tvQuantity;
+        private final TextView tvSubtotal;
+        private final ImageButton btnDecreaseQuantity;
+        private final ImageButton btnIncreaseQuantity;
+        private final ImageButton btnDeleteItem;
+        private final View cartItemContainer;
 
 
         public CartViewHolder(@NonNull View itemView) {

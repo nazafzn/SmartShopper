@@ -1,16 +1,12 @@
 package com.smartshopper.cart;
 
-import static android.content.ContentValues.TAG;
-
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,12 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.smartshopper.R;
 
+import java.util.List;
 import java.util.Locale;
 
 public class CartActivity extends AppCompatActivity implements OnCartUpdateListener {
 
     private RecyclerView rvCartItems;
-    private CartAdapter cartAdapter;
     private CartManager cartManager;
     private TextView tvTotalPrice;
     private LinearLayout emptyCartState;
@@ -51,7 +47,7 @@ public class CartActivity extends AppCompatActivity implements OnCartUpdateListe
         rvCartItems.setLayoutManager(new LinearLayoutManager(this));
 
         // Set up adapter
-        cartAdapter = new CartAdapter(cartManager.getCartItems(), this);
+        CartAdapter cartAdapter = new CartAdapter(cartManager.getCartItems(), this);
         rvCartItems.setAdapter(cartAdapter);
 
         // Initialize TTS
@@ -63,9 +59,28 @@ public class CartActivity extends AppCompatActivity implements OnCartUpdateListe
 
         // Set click listeners
         btnBack.setOnClickListener(v -> finish());
-        btnTtsToggle.setOnClickListener(v -> Toast.makeText(this, "tts button clicked", Toast.LENGTH_SHORT).show());
-        totalCartContainer.setOnClickListener(v -> {speakTotalPrice(String.format("Your total is: %s", speakProductPrice(cartManager.getTotalPrice())));});
+        btnTtsToggle.setOnClickListener(v -> speakAllCartItems());
+        totalCartContainer.setOnClickListener(v -> speakTotalPrice(String.format("Your total is: %s", speakProductPrice(cartManager.getTotalPrice()))));
         btnStartShopping.setOnClickListener(v -> finish());
+    }
+
+    private void speakAllCartItems() {
+        if (!ttsInitialized) {
+            return;
+        }
+        if (cartManager.getCartItems().isEmpty()) {
+            textToSpeech.speak("Your cart is empty", TextToSpeech.QUEUE_FLUSH, null, null);
+            return;
+        }
+        List<CartItem> items = cartManager.getCartItems();
+
+        //say total items first
+        textToSpeech.speak(String.format("You have %d different items in your cart", items.size()), TextToSpeech.QUEUE_FLUSH, null, null);
+        //then one by one total each
+        for (CartItem item : items) {
+            String itemText = String.format("%d: %s", item.getQuantity(), item.getName());
+            textToSpeech.speak(itemText, TextToSpeech.QUEUE_ADD, null, null);
+        }
     }
 
     private void speakTotalPrice(String totalPrice) {

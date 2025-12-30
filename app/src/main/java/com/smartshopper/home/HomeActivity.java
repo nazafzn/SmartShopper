@@ -2,12 +2,11 @@ package com.smartshopper.home;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.speech.tts.TextToSpeech;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -24,11 +23,16 @@ public class HomeActivity extends AppCompatActivity {
     private CartManager cartManager;
     private TextView tvCartItemCount;
     private TextView tvCartTotal;
+    private TextToSpeech textToSpeech;
+    private boolean ttsInitialized = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        // Initialize TTS
+        textToSpeech = new TextToSpeech(this, status -> ttsInitialized = true);
 
         // Get CartManager instance
         cartManager = CartManager.getInstance();
@@ -44,7 +48,7 @@ public class HomeActivity extends AppCompatActivity {
         // Set up click listeners
         btnScan.setOnClickListener(v -> startActivity(new Intent(this, ScanActivity.class)));
         btnViewCart.setOnClickListener(v -> startActivity(new Intent(this, CartActivity.class)));
-        btnTtsToggle.setOnClickListener(v -> Toast.makeText(this, "tts button clicked", Toast.LENGTH_SHORT).show());
+        btnTtsToggle.setOnClickListener(v -> speakAppInfo("Welcome to ShopMate! Start by scanning a product to add it to your cart."));
 
         bottomNav.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
@@ -55,7 +59,6 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, CartActivity.class));
                 return true;
             } else if (itemId == R.id.nav_home) {
-                // You are already here
                 return true;
             }
             return false;
@@ -63,6 +66,13 @@ public class HomeActivity extends AppCompatActivity {
 
         // Update cart info
         updateCartInfo();
+    }
+
+    private void speakAppInfo(String text) {
+        if (!ttsInitialized) {
+            return;
+        }
+        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
     }
 
     @Override

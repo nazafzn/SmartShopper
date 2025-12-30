@@ -2,13 +2,15 @@ package com.smartshopper.model;
 
 import android.graphics.RectF;
 
+import androidx.annotation.NonNull;
+
 /**
  * Represents a single detection result from the model
  */
 public class DetectionResult {
-    private String label;
-    private float confidence;
-    private RectF boundingBox;
+    private final String label;
+    private final float confidence;
+    private final RectF boundingBox;
 
     public DetectionResult(String label, float confidence, RectF boundingBox) {
         this.label = label;
@@ -28,6 +30,7 @@ public class DetectionResult {
         return boundingBox;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return String.format("%s (%.2f%%)", label, confidence * 100);

@@ -15,7 +15,6 @@ import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,11 +64,7 @@ public class ScanActivity extends AppCompatActivity {
     private String lastSpokenProduct = "";
     private long lastSpeechTime = 0;
     private static final long TTS_COOLDOWN_MS = 5000; // avoid overlapping audio
-    private static final long CARD_TIMEOUT_MS = 3000; // make the card stay longer after detection (5secs)
-
-    // cart manager
-    private CartManager cartManager;
-
+    private static final long CARD_TIMEOUT_MS = 3000; // make the card stay longer after detection (3secs)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,15 +82,19 @@ public class ScanActivity extends AppCompatActivity {
         // Initialize camera manager
         cameraManager = new CameraManager(this, textureView);
 
+        // initialize product repository
+        productRepository = new ProductRepository(this);
+
+        // Initialize TTS
+        textToSpeech = new TextToSpeech(this, status -> ttsInitialized = true);
+
         // Find buttons
         ImageButton btnBack = findViewById(R.id.btn_back);
-        ImageButton btnTtsToggle = findViewById(R.id.btn_tts_toggle_scan);  // todo add voice
         FloatingActionButton btnAddToCart = findViewById(R.id.btn_add_to_cart);
         Button btnViewCart = findViewById(R.id.btn_view_cart_from_scan);
 
         // Set click listeners
         btnBack.setOnClickListener(v -> finish());
-        btnTtsToggle.setOnClickListener(v -> Toast.makeText(ScanActivity.this, "tts button clicked", Toast.LENGTH_SHORT).show());
         btnAddToCart.setOnClickListener(v -> {
             CartManager.getInstance().addItem(scannedProduct.getName(), scannedProduct.getPrice());
             Toast.makeText(ScanActivity.this, "Product added to cart", Toast.LENGTH_SHORT).show();
@@ -111,12 +110,6 @@ public class ScanActivity extends AppCompatActivity {
             Toast.makeText(this, "Failed to load detection model", Toast.LENGTH_LONG).show();
             finish();
         }
-
-        // initialize product repository
-        productRepository = new ProductRepository(this);
-
-        // Initialize TTS
-        textToSpeech = new TextToSpeech(this, status -> ttsInitialized = true);
     }
 
     @Override
